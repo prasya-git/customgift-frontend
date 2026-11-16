@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from 'react'
 
 const GiftContext = createContext()
@@ -5,89 +6,124 @@ const GiftContext = createContext()
 export const useGift = () => useContext(GiftContext)
 
 export function GiftProvider({ children }) {
-  const [cart, setCart] = useState(() => {
-    return JSON.parse(localStorage.getItem('giftCart')) || []
-  })
 
-  const [wishlist, setWishlist] = useState(() => {
-    return JSON.parse(localStorage.getItem('giftWishlist')) || []
-  })
+    const [cart, setCart] = useState(() => {
+        return JSON.parse(localStorage.getItem('giftCart')) || []
+    })
 
-  useEffect(() => {
-    localStorage.setItem('giftCart', JSON.stringify(cart))
-  }, [cart])
+    const [wishlist, setWishlist] = useState(() => {
+        return JSON.parse(localStorage.getItem('giftWishlist')) || []
+    })
 
-  useEffect(() => {
-    localStorage.setItem('giftWishlist', JSON.stringify(wishlist))
-  }, [wishlist])
+    useEffect(() => {
+        localStorage.setItem('giftCart', JSON.stringify(cart))
+    }, [cart])
 
-  const addToCart = (gift) => {
-  setCart(prev => {
-    const existing = prev.find(
-      item =>
-        item.id === gift.id &&
-        item.customName === gift.customName &&
-        item.message === gift.message
-    )
+    useEffect(() => {
+        localStorage.setItem('giftWishlist', JSON.stringify(wishlist))
+    }, [wishlist])
 
-    if (existing) {
-      return prev.map(item =>
-        item.id === gift.id &&
-        item.customName === gift.customName &&
-        item.message === gift.message
-          ? { ...item, quantity: item.quantity + (gift.quantity || 1) }
-          : item
-      )
+    // Add gift to cart
+    const addToCart = (gift) => {
+        const giftId = String(gift.id || gift._id)
+
+        const newGift = {
+            ...gift,
+            id: giftId,
+            quantity: gift.quantity || 1
+        }
+
+        setCart(prev => {
+            const existing = prev.find(item =>
+                String(item.id || item._id) === giftId &&
+                item.customName === gift.customName &&
+                item.message === gift.message &&
+                item.photo === gift.photo
+            )
+
+            if (existing) {
+                return prev.map(item =>
+                    String(item.id || item._id) === giftId &&
+                    item.customName === gift.customName &&
+                    item.message === gift.message &&
+                    item.photo === gift.photo
+                        ? {
+                            ...item,
+                            quantity: item.quantity + newGift.quantity
+                        }
+                        : item
+                )
+            }
+
+            return [...prev, newGift]
+        })
     }
 
-    return [...prev, { ...gift, quantity: gift.quantity || 1 }]
-  })
-}
+    // Remove gift from cart
+    const removeFromCart = (id) => {
+        setCart(prev =>
+            prev.filter(item => String(item.id || item._id) !== String(id))
+        )
+    }
 
-  const removeFromCart = (id) => {
-    setCart(prev => prev.filter(item => item.id !== id))
-  }
+    // Update cart quantity
+    const updateQuantity = (id, quantity) => {
+        if (quantity < 1) return
 
-  const updateQuantity = (id, quantity) => {
-    if (quantity < 1) return
+        setCart(prev =>
+            prev.map(item =>
+                String(item.id || item._id) === String(id)
+                    ? { ...item, quantity }
+                    : item
+            )
+        )
+    }
 
-    setCart(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, quantity } : item
-      )
+    // Add or remove gift from wishlist
+    const toggleWishlist = (gift) => {
+        const giftId = String(gift.id || gift._id)
+
+        const newGift = {
+            ...gift,
+            id: giftId
+        }
+
+        setWishlist(prev => {
+            const exists = prev.some(
+                item => String(item.id || item._id) === giftId
+            )
+
+            return exists
+                ? prev.filter(
+                    item => String(item.id || item._id) !== giftId
+                )
+                : [...prev, newGift]
+        })
+    }
+
+    const cartCount = cart.reduce(
+        (total, item) => total + item.quantity,
+        0
     )
-  }
 
-  const toggleWishlist = (gift) => {
-    setWishlist(prev => {
-      const exists = prev.find(item => item.id === gift.id)
+    const cartTotal = cart.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+    )
 
-      return exists
-        ? prev.filter(item => item.id !== gift.id)
-        : [...prev, gift]
-    })
-  }
-
-  const cartCount = cart.reduce((total, item) => total + item.quantity, 0)
-
-  const cartTotal = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  )
-
-  return (
-    <GiftContext.Provider value={{
-      cart,
-      setCart,
-      wishlist,
-      cartCount,
-      cartTotal,
-      addToCart,
-      removeFromCart,
-      updateQuantity,
-      toggleWishlist
-    }}>
-      {children}
-    </GiftContext.Provider>
-  )
+    return (
+        <GiftContext.Provider value={{
+            cart,
+            setCart,
+            wishlist,
+            cartCount,
+            cartTotal,
+            addToCart,
+            removeFromCart,
+            updateQuantity,
+            toggleWishlist
+        }}>
+            {children}
+        </GiftContext.Provider>
+    )
 }

@@ -1,132 +1,228 @@
-import React, { useState } from 'react'
+
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { FaUser, FaBox, FaHeart, FaSignOutAlt } from 'react-icons/fa'
 
 import Header from '../components/Header'
 import Purchase from '../components/Purchase'
 import Edit from '../components/Edit'
+import apiService from '../../api/apiService'
 
 function Profile() {
-  const navigate = useNavigate()
-  const location = useLocation()
 
-  const user = JSON.parse(localStorage.getItem('giftUser'))
+    const navigate = useNavigate()
+    const location = useLocation()
 
-  const [activeTab, setActiveTab] = useState('orders')
-
-  const orders = JSON.parse(localStorage.getItem('giftOrders')) || []
-
-  if (!user) {
-    return (
-      <>
-        <Header />
-        <div className="text-center py-28">
-          <h2 className="text-3xl font-bold">Please Login First</h2>
-          <Link to="/login" className="gift-btn inline-block mt-6">
-            Login
-          </Link>
-        </div>
-      </>
+    const [user, setUser] = useState(
+        JSON.parse(localStorage.getItem('giftUser')) || null
     )
-  }
 
-  const logout = () => {
-    localStorage.removeItem('giftUser')
-    navigate('/')
-  }
+    const [orders, setOrders] = useState([])
+    const [activeTab, setActiveTab] = useState('orders')
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState('')
 
-  return (
-    <>
-      <Header />
+    // Fetch profile and order details from backend
+    useEffect(() => {
+        const fetchAccountData = async () => {
 
-      <section className="px-6 md:px-16 py-12">
+            const token = sessionStorage.getItem('token')
 
-        {location.state?.orderPlaced && (
-          <div className="bg-green-100 text-green-800 p-5 rounded-xl mb-8">
-            Your order was placed successfully!
-            <p className="text-sm mt-1">
-              Order ID: {location.state.orderId}
-            </p>
-          </div>
-        )}
+            if (!token) {
+                setLoading(false)
+                return
+            }
 
-        <h1 className="text-4xl font-bold mb-8">My Account</h1>
+            setLoading(true)
+            setError('')
 
-        <div className="grid md:grid-cols-4 gap-7">
+            try {
+                const [profileResponse, ordersResponse] = await Promise.all([
+                    apiService('GET', '/user-profile'),
+                    apiService('GET', '/user-orders')
+                ])
 
-          <div className="bg-white shadow-sm rounded-2xl p-6 h-fit">
+                if (profileResponse?.response) throw profileResponse
+                if (ordersResponse?.response) throw ordersResponse
 
-            <div className="text-center">
-              <div className="w-24 h-24 bg-rose-100 text-rose-700 rounded-full flex items-center justify-center text-4xl mx-auto">
-                <FaUser />
-              </div>
+                const profileData = profileResponse.data
 
-              <h2 className="text-xl font-semibold mt-4">{user.name}</h2>
-              <p className="text-gray-500 text-sm">{user.email}</p>
-            </div>
+                const updatedUser = {
+                    ...profileData,
+                    name: profileData.username || profileData.name
+                }
 
-            <hr className="my-6" />
+                setUser(updatedUser)
+                localStorage.setItem('giftUser', JSON.stringify(updatedUser))
 
-            <div className="flex flex-col gap-3">
+                setOrders(
+                    Array.isArray(ordersResponse.data)
+                        ? ordersResponse.data
+                        : []
+                )
 
-              <button
-                onClick={() => setActiveTab('orders')}
-                className={`p-3 rounded-lg flex items-center gap-3 ${
-                  activeTab === 'orders' ? 'bg-rose-100 text-rose-700' : ''
-                }`}
-              >
-                <FaBox /> My Orders
-              </button>
+            } catch (err) {
+                setError(
+                    err.response?.data?.message ||
+                    'Unable to load your account details'
+                )
+            } finally {
+                setLoading(false)
+            }
+        }
 
-              <button
-                onClick={() => setActiveTab('profile')}
-                className={`p-3 rounded-lg flex items-center gap-3 ${
-                  activeTab === 'profile' ? 'bg-rose-100 text-rose-700' : ''
-                }`}
-              >
-                <FaUser /> Edit Profile
-              </button>
+        fetchAccountData()
+    }, [])
 
-              <Link to="/wishlist" className="p-3 rounded-lg flex items-center gap-3">
-                <FaHeart /> My Wishlist
-              </Link>
+    const logout = () => {
+        sessionStorage.removeItem('token')
+        localStorage.removeItem('giftUser')
+        navigate('/login')
+    }
 
-              <button
-                onClick={logout}
-                className="p-3 rounded-lg flex items-center gap-3 text-red-600"
-              >
-                <FaSignOutAlt /> Logout
-              </button>
+    if (!sessionStorage.getItem('token')) {
+        return (
+            <>
+                <Header />
+                <div className="text-center py-28">
+                    <h2 className="text-3xl font-bold">
+                        Please Login First
+                    </h2>
+                    <Link to="/login" className="gift-btn inline-block mt-6">
+                        Login
+                    </Link>
+                </div>
+            </>
+        )
+    }
 
-            </div>
-          </div>
+    return (
+        <>
+            <Header />
 
-          <div className="md:col-span-3">
+            <section className="px-6 md:px-16 py-12">
 
-            {activeTab === 'orders' && (
-              <>
-                <h2 className="text-2xl font-semibold mb-6">
-                  My Orders ({orders.length})
-                </h2>
-                <Purchase orders={orders} />
-              </>
-            )}
+                {location.state?.orderPlaced && (
+                    <div className="bg-green-100 text-green-800 p-5 rounded-xl mb-8">
+                        Your order was placed successfully!
+                        <p className="text-sm mt-1">
+                            Order ID: {location.state.orderId}
+                        </p>
+                    </div>
+                )}
 
-            {activeTab === 'profile' && (
-              <>
-                <h2 className="text-2xl font-semibold mb-6">
-                  Profile Information
-                </h2>
-                <Edit user={user} />
-              </>
-            )}
+                <h1 className="text-4xl font-bold mb-8">
+                    My Account
+                </h1>
 
-          </div>
+                {loading ? (
+                    <div className="text-center py-20 text-rose-700">
+                        Loading your account...
+                    </div>
+                ) : error ? (
+                    <div className="text-center py-10">
+                        <p className="text-red-600">{error}</p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="gift-btn mt-4"
+                        >
+                            Try Again
+                        </button>
+                    </div>
+                ) : (
+                    <div className="grid md:grid-cols-4 gap-7">
 
-        </div>
-      </section>
-    </>
-  )
+                        <div className="bg-white shadow-sm rounded-2xl p-6 h-fit">
+
+                            <div className="text-center">
+                                <div className="w-24 h-24 bg-rose-100 text-rose-700 rounded-full flex items-center justify-center text-4xl mx-auto">
+                                    <FaUser />
+                                </div>
+
+                                <h2 className="text-xl font-semibold mt-4">
+                                    {user?.name || user?.username}
+                                </h2>
+
+                                <p className="text-gray-500 text-sm">
+                                    {user?.email}
+                                </p>
+                            </div>
+
+                            <hr className="my-6" />
+
+                            <div className="flex flex-col gap-3">
+
+                                <button
+                                    onClick={() => setActiveTab('orders')}
+                                    className={`p-3 rounded-lg flex items-center gap-3 ${
+                                        activeTab === 'orders'
+                                            ? 'bg-rose-100 text-rose-700'
+                                            : ''
+                                    }`}
+                                >
+                                    <FaBox /> My Orders
+                                </button>
+
+                                <button
+                                    onClick={() => setActiveTab('profile')}
+                                    className={`p-3 rounded-lg flex items-center gap-3 ${
+                                        activeTab === 'profile'
+                                            ? 'bg-rose-100 text-rose-700'
+                                            : ''
+                                    }`}
+                                >
+                                    <FaUser /> Edit Profile
+                                </button>
+
+                                <Link
+                                    to="/wishlist"
+                                    className="p-3 rounded-lg flex items-center gap-3"
+                                >
+                                    <FaHeart /> My Wishlist
+                                </Link>
+
+                                <button
+                                    onClick={logout}
+                                    className="p-3 rounded-lg flex items-center gap-3 text-red-600"
+                                >
+                                    <FaSignOutAlt /> Logout
+                                </button>
+
+                            </div>
+                        </div>
+
+                        <div className="md:col-span-3">
+
+                            {activeTab === 'orders' && (
+                                <>
+                                    <h2 className="text-2xl font-semibold mb-6">
+                                        My Orders ({orders.length})
+                                    </h2>
+
+                                    <Purchase orders={orders} />
+                                </>
+                            )}
+
+                            {activeTab === 'profile' && (
+                                <>
+                                    <h2 className="text-2xl font-semibold mb-6">
+                                        Profile Information
+                                    </h2>
+
+                                    <Edit
+                                    user={user}
+                                    onUpdate={setUser}
+                                  />
+                                </>
+                            )}
+
+                        </div>
+                    </div>
+                )}
+
+            </section>
+        </>
+    )
 }
 
 export default Profile

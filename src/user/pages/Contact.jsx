@@ -1,8 +1,11 @@
+
 import React, { useState } from 'react'
 import { FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa'
 import Header from '../components/Header'
+import apiService from '../../api/apiService'
 
 function Contact() {
+
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -10,31 +13,73 @@ function Contact() {
     message: ''
   })
 
+  const [loading, setLoading] = useState(false)
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const messages = JSON.parse(localStorage.getItem('giftMessages')) || []
+    if (loading) return
 
-    localStorage.setItem(
-      'giftMessages',
-      JSON.stringify([
-        ...messages,
-        { ...form, date: new Date().toLocaleString() }
-      ])
-    )
+    // Prevent empty or whitespace-only values
+    if (
+      !form.name.trim() ||
+      !form.email.trim() ||
+      !form.message.trim()
+    ) {
+      alert('Please fill in all required fields.')
+      return
+    }
 
-    alert('Thank you! Your message has been submitted.')
+    try {
+      setLoading(true)
 
-    setForm({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    })
+      const response = await apiService(
+        'POST',
+        '/contact',
+        {
+          name: form.name.trim(),
+          email: form.email.trim(),
+          subject: form.subject.trim(),
+          message: form.message.trim()
+        }
+      )
+
+      // apiService returns an error object instead of throwing
+      if (response?.response) {
+        throw response
+      }
+
+      alert(
+        response.data?.message ||
+        'Thank you! Your message has been submitted.'
+      )
+
+      setForm({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      })
+
+    } catch (error) {
+
+      console.log('Contact API Error:', error)
+
+      const errorMessage =
+        typeof error.response?.data === 'string'
+          ? error.response.data
+          : error.response?.data?.message ||
+            'Unable to send your message. Please try again.'
+
+      alert(errorMessage)
+
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -43,6 +88,7 @@ function Contact() {
 
       <section className="bg-[#f8e7e9] text-center py-16">
         <h1 className="text-5xl font-bold">Contact Us</h1>
+
         <p className="text-gray-600 mt-4">
           We would love to hear from you.
         </p>
@@ -66,6 +112,7 @@ function Contact() {
               <div className="bg-rose-100 text-rose-700 p-4 rounded-full">
                 <FaPhone />
               </div>
+
               <div>
                 <h3 className="font-semibold">Phone</h3>
                 <p className="text-gray-500">+91 98765 43210</p>
@@ -76,6 +123,7 @@ function Contact() {
               <div className="bg-rose-100 text-rose-700 p-4 rounded-full">
                 <FaEnvelope />
               </div>
+
               <div>
                 <h3 className="font-semibold">Email</h3>
                 <p className="text-gray-500">hello@giftora.com</p>
@@ -86,6 +134,7 @@ function Contact() {
               <div className="bg-rose-100 text-rose-700 p-4 rounded-full">
                 <FaMapMarkerAlt />
               </div>
+
               <div>
                 <h3 className="font-semibold">Location</h3>
                 <p className="text-gray-500">Kerala, India</p>
@@ -121,7 +170,6 @@ function Contact() {
           />
 
           <input
-            required
             name="subject"
             value={form.subject}
             onChange={handleChange}
@@ -139,9 +187,14 @@ function Contact() {
             className="w-full border rounded-lg p-3"
           />
 
-          <button className="gift-btn w-full">
-            Send Message
+          <button
+            type="submit"
+            disabled={loading}
+            className="gift-btn w-full disabled:opacity-60"
+          >
+            {loading ? 'Sending...' : 'Send Message'}
           </button>
+
         </form>
 
       </section>
