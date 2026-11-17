@@ -323,7 +323,7 @@ function AdminResource() {
                                             const imageUrl = gift.image
                                                 ? gift.image.startsWith('http')
                                                     ? gift.image
-                                                    : `http://localhost:3000/uploads/${gift.image}`
+                                                    : `https://custom-gift-backend.onrender.com/uploads/${gift.image}`
                                                 : ''
 
                                             const stock = Number(gift.stock) || 0
