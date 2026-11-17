@@ -58,25 +58,25 @@ function Home() {
             name: 'Birthday Gifts',
             filter: 'Birthday',
             icon: <FaBirthdayCake />,
-            image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600'
+            image: 'https://wallpaperbat.com/img/107375900-personalised-birthday-gifts.jpg'
         },
         {
             name: 'Anniversary',
             filter: 'Anniversary',
             icon: <FaHeart />,
-            image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600'
+            image: 'https://celebrateandhavefun.com/wp-content/uploads/2024/02/DALL%C2%B7E-2024-02-16-11.07.34-Create-an-elegant-and-romantic-featured-image-for-an-article-on-gift-ideas-for-a-30th-wedding-anniversary.-The-image-should-visually-encapsulate-the-e.webp'
         },
         {
             name: 'Photo Gifts',
             filter: 'Photo Gifts',
             icon: <FaCamera />,
-            image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600'
+            image: 'https://www.thezappybox.com/cdn/shop/files/A5_Picture_Perfect_Frame_Dark_Brown_1.webp?v=1774076000&width=1080'
         },
         {
             name: 'Gift Hampers',
             filter: 'Gift Hampers',
             icon: <FaGift />,
-            image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600'
+            image: 'https://casolia.com/img/image10_creative-ways-to-wrap-a-gift-basket-ideas_add-a-pop-of-metallic.jpg'
         }
     ]
 
@@ -136,7 +136,7 @@ function Home() {
             <section className="relative min-h-[620px] md:min-h-[690px] flex items-center overflow-hidden">
 
                 <img
-                    src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=1800"
+                    src="https://png.pngtree.com/thumb_back/fw800/background/20240718/pngtree-3d-scene-of-pink-flowers-and-gifts-on-background-image_16016982.jpg"
                     alt="Beautiful gift boxes"
                     className="absolute inset-0 w-full h-full object-cover object-center"
                 />
@@ -419,7 +419,7 @@ function Home() {
                     <div className="min-h-[350px] md:min-h-[550px] relative overflow-hidden">
 
                         <img
-                            src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1000"
+                            src="https://image.slidesdocs.com/responsive-images/background/a-pair-of-pink-balloons-with-gifts-hanging-above-the-pink-powerpoint-background_e385e06f4d__960_540.jpg"
                             alt="Personalized gift"
                             className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition duration-700"
                         />
