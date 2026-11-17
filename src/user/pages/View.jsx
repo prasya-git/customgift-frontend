@@ -16,6 +16,7 @@ import {
 import Header from '../components/Header'
 import { useGift } from '../../context/GiftContext'
 import apiService from '../../api/apiService'
+import axiosInstance from '../../api/axiosInstance'
 
 function View() {
 
@@ -38,11 +39,14 @@ function View() {
 
     // Fetch selected gift from MongoDB
     useEffect(() => {
+
         const fetchGift = async () => {
+
             setLoading(true)
             setError('')
 
             try {
+
                 const response = await apiService(
                     'GET',
                     `/view-gift/${id}`
@@ -51,22 +55,32 @@ function View() {
                 if (response?.response) throw response
 
                 setGift(response.data)
+
             } catch (err) {
+
                 setError(
                     err.response?.data?.message || 'Unable to load gift details'
                 )
+
             } finally {
                 setLoading(false)
             }
+
         }
 
         fetchGift()
+
     }, [id])
 
+    // Get image URL from axiosInstance
     const imageUrl = gift?.image
         ? gift.image.startsWith('http')
             ? gift.image
-            : `http://localhost:3000/uploads/${gift.image}`
+            : `${axiosInstance.defaults.baseURL}${
+                gift.image.startsWith('/uploads/')
+                    ? gift.image
+                    : `/uploads/${gift.image}`
+            }`
         : ''
 
     const isWishlisted = gift
@@ -77,6 +91,7 @@ function View() {
 
     // Upload photo to backend
     const handlePhoto = async (e) => {
+
         const file = e.target.files[0]
 
         if (!file) return
@@ -105,6 +120,7 @@ function View() {
         setUploading(true)
 
         try {
+
             const response = await apiService(
                 'POST',
                 '/upload-customization',
@@ -115,20 +131,27 @@ function View() {
 
             // Backend returns the uploaded image filename
             setPhoto(response.data.image)
+
             alert('Photo uploaded successfully')
+
         } catch (err) {
+
             setPhoto('')
             setPreview('')
+
             alert(
                 err.response?.data?.message ||
                 'Photo upload failed. Please login and try again.'
             )
+
         } finally {
             setUploading(false)
         }
+
     }
 
     const handleAddToCart = () => {
+
         if (gift.stock < quantity) {
             alert('Requested quantity is not available')
             return
@@ -156,10 +179,12 @@ function View() {
 
         addToCart(customizedGift)
         navigate('/cart')
+
     }
 
     // Loading
     if (loading) {
+
         return (
             <>
                 <Header />
@@ -179,6 +204,7 @@ function View() {
 
     // Error
     if (error || !gift) {
+
         return (
             <>
                 <Header />

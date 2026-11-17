@@ -8,6 +8,7 @@ import {
     FaShoppingCart
 } from 'react-icons/fa'
 import { useGift } from '../../context/GiftContext'
+import axiosInstance from '../../api/axiosInstance'
 
 function GiftCard({ gift }) {
 
@@ -22,10 +23,15 @@ function GiftCard({ gift }) {
 
     const giftId = gift._id || gift.id
 
+    // Get image URL from axiosInstance
     const imageUrl = gift.image
         ? gift.image.startsWith('http')
             ? gift.image
-            : `http://localhost:3000/uploads/${gift.image}`
+            : `${axiosInstance.defaults.baseURL}${
+                gift.image.startsWith('/uploads/')
+                    ? gift.image
+                    : `/uploads/${gift.image}`
+            }`
         : ''
 
     const isWishlisted = wishlist.some(

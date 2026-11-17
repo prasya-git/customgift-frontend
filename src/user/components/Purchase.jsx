@@ -10,18 +10,27 @@ import {
     FaReceipt
 } from 'react-icons/fa'
 import GiftStatus from './GiftStatus'
+import axiosInstance from '../../api/axiosInstance'
 
 function Purchase({ orders = [] }) {
 
+    // Get uploaded image URL from axiosInstance
     const getImageUrl = (image) => {
+
         if (!image) return ''
 
-        return image.startsWith('http')
-            ? image
-            : `http://localhost:3000/uploads/${image}`
+        if (image.startsWith('http')) return image
+
+        return `${axiosInstance.defaults.baseURL}${
+            image.startsWith('/uploads/')
+                ? image
+                : `/uploads/${image}`
+        }`
+
     }
 
     if (orders.length === 0) {
+
         return (
             <div className="bg-white rounded-3xl border border-[#f2e2e7] shadow-sm p-10 md:p-16 text-center">
 
@@ -64,6 +73,7 @@ function Purchase({ orders = [] }) {
 
                             <div>
                                 <div className="flex items-center gap-2 mb-2">
+
                                     <div className="w-9 h-9 rounded-xl bg-white text-[#872d4c] flex items-center justify-center shadow-sm">
                                         <FaReceipt />
                                     </div>
@@ -71,10 +81,12 @@ function Purchase({ orders = [] }) {
                                     <h3 className="font-bold text-lg md:text-xl text-[#3b202b]">
                                         Order #{order.orderId || order._id}
                                     </h3>
+
                                 </div>
 
                                 <p className="flex items-center gap-2 text-sm text-[#987985]">
                                     <FaCalendarAlt className="text-[#b45b78]" />
+
                                     Ordered on {
                                         order.createdAt
                                             ? new Date(order.createdAt).toLocaleDateString()
@@ -84,6 +96,7 @@ function Purchase({ orders = [] }) {
                             </div>
 
                             <div className="text-left sm:text-right">
+
                                 <p className="text-xs uppercase tracking-wider font-semibold text-[#a1848e] mb-1">
                                     Total Amount
                                 </p>
@@ -97,6 +110,7 @@ function Purchase({ orders = [] }) {
                                     <FaCreditCard className="text-[#b45b78]" />
                                     {order.paymentMethod}
                                 </p>
+
                             </div>
 
                         </div>
@@ -107,6 +121,7 @@ function Purchase({ orders = [] }) {
                     <div className="p-5 md:p-7">
 
                         <div className="flex items-center gap-2 mb-5">
+
                             <FaBoxOpen className="text-[#872d4c]" />
 
                             <h4 className="font-bold text-[#3b202b]">
@@ -116,6 +131,7 @@ function Purchase({ orders = [] }) {
                             <span className="text-xs bg-[#fbe8ed] text-[#872d4c] px-2.5 py-1 rounded-full font-semibold">
                                 {order.items?.length || 0} Items
                             </span>
+
                         </div>
 
                         <div className="space-y-5">
@@ -135,6 +151,7 @@ function Purchase({ orders = [] }) {
 
                                         {/* Gift Image */}
                                         <div className="shrink-0">
+
                                             {giftImage ? (
                                                 <img
                                                     src={getImageUrl(giftImage)}
@@ -146,6 +163,7 @@ function Purchase({ orders = [] }) {
                                                     <FaGift className="text-3xl text-[#b45b78]" />
                                                 </div>
                                             )}
+
                                         </div>
 
                                         {/* Gift Details */}
@@ -204,6 +222,7 @@ function Purchase({ orders = [] }) {
 
                                                     {item.customization?.photo && (
                                                         <div className="mt-2">
+
                                                             <p className="text-xs text-[#987985] mb-2">
                                                                 Uploaded Photo
                                                             </p>
@@ -213,6 +232,7 @@ function Purchase({ orders = [] }) {
                                                                 alt="Customized gift"
                                                                 className="w-20 h-20 object-cover rounded-xl border border-[#e9cbd5]"
                                                             />
+
                                                         </div>
                                                     )}
 
@@ -231,11 +251,13 @@ function Purchase({ orders = [] }) {
                         <div className="mt-6 pt-5 border-t border-[#f1e3e7]">
 
                             <div className="flex items-center gap-2 mb-3">
+
                                 <FaBoxOpen className="text-[#872d4c]" />
 
                                 <h4 className="font-bold text-[#3b202b]">
                                     Order Status
                                 </h4>
+
                             </div>
 
                             <GiftStatus status={order.orderStatus} />
