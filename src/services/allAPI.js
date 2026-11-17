@@ -1,6 +1,7 @@
 
 import apiService from '../api/apiService'
 
+
 // ================= AUTH APIs =================
 
 // Register User
@@ -44,9 +45,9 @@ export const deleteGiftAPI = (id) => {
 
 // ================= ORDER APIs =================
 
-// Place Order
+// Place COD Order
 export const placeOrderAPI = (data) => {
-    return apiService('POST', '/orders', data)
+    return apiService('POST', '/place-order', data)
 }
 
 // Get All Orders (Admin)
@@ -62,6 +63,24 @@ export const getMyOrdersAPI = () => {
 // Update Order Status (Admin)
 export const updateOrderStatusAPI = (id, status) => {
     return apiService('PUT', `/orders/${id}`, { status })
+}
+
+
+// ================= STRIPE PAYMENT APIs =================
+
+// Create Stripe Checkout Session
+export const createCheckoutSessionAPI = (data) => {
+    return apiService('POST', '/create-checkout-session', data)
+}
+
+// Verify Stripe Payment
+export const verifyPaymentAPI = (sessionId) => {
+    return apiService('GET', `/verify-payment/${sessionId}`)
+}
+
+// Cancel Stripe Checkout Session
+export const cancelCheckoutAPI = (sessionId) => {
+    return apiService('POST', `/cancel-checkout/${sessionId}`)
 }
 
 

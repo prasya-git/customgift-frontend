@@ -16,16 +16,13 @@ function Home() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
 
-    // Fetch latest four gifts from backend
     useEffect(() => {
 
         const fetchHomeGifts = async () => {
-
             setLoading(true)
             setError('')
 
             try {
-
                 const response = await apiService('GET', '/home-gifts')
 
                 if (response?.response) {
@@ -37,7 +34,6 @@ function Home() {
                 )
 
             } catch (err) {
-
                 console.log('Home Gifts Error:', err)
 
                 setError(
@@ -62,300 +58,472 @@ function Home() {
             name: 'Birthday Gifts',
             filter: 'Birthday',
             icon: <FaBirthdayCake />,
-            image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500'
+            image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600'
         },
         {
             name: 'Anniversary',
             filter: 'Anniversary',
             icon: <FaHeart />,
-            image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=500'
+            image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600'
         },
         {
             name: 'Photo Gifts',
             filter: 'Photo Gifts',
             icon: <FaCamera />,
-            image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500'
+            image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600'
         },
         {
             name: 'Gift Hampers',
             filter: 'Gift Hampers',
             icon: <FaGift />,
-            image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500'
+            image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600'
         }
     ]
+
+    const benefits = [
+        {
+            icon: <FaGift />,
+            title: 'Personalized Gifts',
+            description: 'Made especially for you'
+        },
+        {
+            icon: <FaTruck />,
+            title: 'Fast Delivery',
+            description: 'Delivered with care'
+        },
+        {
+            icon: <FaHeart />,
+            title: 'Made with Love',
+            description: 'For your special moments'
+        },
+        {
+            icon: <FaShieldAlt />,
+            title: 'Secure Shopping',
+            description: 'Safe and easy checkout'
+        }
+    ]
+
+    const reviews = [
+        [
+            'Absolutely beautiful!',
+            'The personalized photo frame was perfect. Great quality and lovely packaging.',
+            'Ananya'
+        ],
+        [
+            'A wonderful surprise',
+            'I ordered a gift hamper for my friend. She loved every detail!',
+            'Meera'
+        ],
+        [
+            'Excellent experience',
+            'Easy customization and the gift arrived safely. Highly recommended.',
+            'Arjun'
+        ]
+    ]
+
+    const sectionTitle = 'text-3xl md:text-4xl font-bold text-[#49232f] tracking-tight'
+    const sectionSubtitle = 'text-rose-700 uppercase tracking-[3px] text-xs md:text-sm font-bold'
+
+    const primaryButton = 'inline-flex items-center justify-center gap-2 bg-[#872d4c] text-white px-7 py-3.5 rounded-full font-semibold shadow-lg shadow-rose-900/20 hover:bg-[#682139] hover:-translate-y-1 transition-all duration-300'
+
+    const secondaryButton = 'inline-flex items-center justify-center gap-2 border-2 border-white text-white px-7 py-3.5 rounded-full font-semibold hover:bg-white hover:text-[#872d4c] transition-all duration-300'
 
     return (
         <>
             <Header />
 
-            {/* Hero section */}
-            <section className="relative min-h-[570px] flex items-center bg-[#f8e9e9] overflow-hidden">
+            {/* HERO SECTION */}
+            <section className="relative min-h-[620px] md:min-h-[690px] flex items-center overflow-hidden">
 
-                <div className="absolute inset-0">
-                    <img
-                        src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=1600"
-                        className="w-full h-full object-cover"
-                        alt="Beautiful gift boxes"
-                    />
+                <img
+                    src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=1800"
+                    alt="Beautiful gift boxes"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                />
 
-                    <div className="absolute inset-0 bg-black/40"></div>
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#29131e]/90 via-[#391b2b]/65 to-black/20"></div>
 
-                <div className="relative z-10 px-7 md:px-20 py-20 max-w-3xl text-white">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
-                    <p className="uppercase tracking-[4px] text-sm mb-5">
-                        Make every moment special
-                    </p>
+                <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-16 py-24">
 
-                    <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-                        Gifts That Speak From The Heart
-                    </h1>
+                    <div className="max-w-3xl text-white">
 
-                    <p className="text-lg mt-6 text-white/90 max-w-xl">
-                        Create meaningful memories with personalized gifts made
-                        especially for the people you love.
-                    </p>
+                        <div className="inline-flex items-center gap-2 bg-white/15 border border-white/30 backdrop-blur-md rounded-full px-5 py-2 mb-7">
+                            <FaGift className="text-rose-300" />
+                            <span className="text-xs md:text-sm uppercase tracking-[2px] font-semibold">
+                                Make every moment special
+                            </span>
+                        </div>
 
-                    <div className="flex flex-wrap gap-4 mt-9">
+                        <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.12] tracking-tight">
+                            Gifts That Speak
+                            <span className="block text-[#ffb8ca] mt-2">
+                                From The Heart
+                            </span>
+                        </h1>
 
-                        <Link
-                            to="/gifts"
-                            className="bg-white text-rose-800 px-7 py-3 rounded-lg font-semibold hover:bg-rose-100"
-                        >
-                            Explore Gifts <FaArrowRight className="inline ml-2" />
-                        </Link>
+                        <p className="text-base md:text-lg mt-7 text-white/85 leading-8 max-w-xl">
+                            Create meaningful memories with personalized gifts
+                            made especially for the people you love. Every gift
+                            tells a beautiful story.
+                        </p>
 
-                        <Link
-                            to="/gifts"
-                            className="border border-white px-7 py-3 rounded-lg hover:bg-white hover:text-rose-800"
-                        >
-                            Customize Now
-                        </Link>
+                        <div className="flex flex-wrap gap-4 mt-9">
+
+                            <Link to="/gifts" className={primaryButton}>
+                                Explore Gifts <FaArrowRight />
+                            </Link>
+
+                            <Link to="/gifts" className={secondaryButton}>
+                                Customize Now <FaGift />
+                            </Link>
+
+                        </div>
+
+                        <div className="flex flex-wrap gap-7 mt-12 text-white/80 text-sm">
+                            <span className="flex items-center gap-2">
+                                <FaHeart className="text-rose-300" />
+                                Made with love
+                            </span>
+                            <span className="flex items-center gap-2">
+                                <FaGift className="text-rose-300" />
+                                Specially customized
+                            </span>
+                        </div>
 
                     </div>
                 </div>
-            </section>
 
-            {/* Benefits */}
-            <section className="grid grid-cols-2 md:grid-cols-4 gap-6 px-6 md:px-16 py-12 bg-white">
-
-                <div className="flex items-center gap-3">
-                    <FaGift className="text-rose-600 text-3xl" />
-                    <div>
-                        <h3 className="font-semibold">Personalized Gifts</h3>
-                        <p className="text-sm text-gray-500">Made just for you</p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    <FaTruck className="text-rose-600 text-3xl" />
-                    <div>
-                        <h3 className="font-semibold">Fast Delivery</h3>
-                        <p className="text-sm text-gray-500">Delivered with care</p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    <FaHeart className="text-rose-600 text-3xl" />
-                    <div>
-                        <h3 className="font-semibold">Made with Love</h3>
-                        <p className="text-sm text-gray-500">For special moments</p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    <FaShieldAlt className="text-rose-600 text-3xl" />
-                    <div>
-                        <h3 className="font-semibold">Secure Shopping</h3>
-                        <p className="text-sm text-gray-500">Safe checkout</p>
-                    </div>
-                </div>
+                <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-[#fffaf9] to-transparent"></div>
 
             </section>
 
-            {/* Categories */}
-            <section className="px-6 md:px-16 py-16">
+            {/* BENEFITS */}
+            <section className="bg-white px-6 md:px-16 py-12 md:py-14">
 
-                <div className="text-center mb-10">
-                    <p className="text-rose-600 uppercase tracking-widest text-sm">
-                        Find the perfect gift
-                    </p>
+                <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-7">
 
-                    <h2 className="section-heading mt-2">
-                        Shop By Category
-                    </h2>
-
-                    <p className="text-gray-500 mt-3">
-                        Explore gifts for every occasion and every special person.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-
-                    {categories.map((category, index) => (
-                        <Link
-                            to={`/gifts?category=${encodeURIComponent(category.filter)}`}
+                    {benefits.map((item, index) => (
+                        <div
                             key={index}
-                            className="relative h-64 rounded-2xl overflow-hidden group"
+                            className="flex items-center gap-4 p-4 rounded-2xl hover:bg-[#fff4f5] transition duration-300"
                         >
-                            <img
-                                src={category.image}
-                                alt={category.name}
-                                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                            />
 
-                            <div className="absolute inset-0 bg-black/40 flex flex-col justify-end p-5 text-white">
-                                <div className="text-2xl mb-2">
-                                    {category.icon}
-                                </div>
+                            <div className="w-14 h-14 shrink-0 rounded-2xl bg-[#fbe8ed] text-[#872d4c] flex items-center justify-center text-2xl">
+                                {item.icon}
+                            </div>
 
-                                <h3 className="text-xl font-semibold">
-                                    {category.name}
+                            <div>
+                                <h3 className="font-bold text-[#49232f] text-sm md:text-base">
+                                    {item.title}
                                 </h3>
-
-                                <p className="text-sm">
-                                    Explore collection →
+                                <p className="text-xs md:text-sm text-gray-500 mt-1">
+                                    {item.description}
                                 </p>
                             </div>
-                        </Link>
-                    ))}
-
-                </div>
-            </section>
-
-            {/* Latest gifts from MongoDB */}
-            <section className="bg-[#fff4f3] px-6 md:px-16 py-16">
-
-                <div className="flex flex-wrap justify-between items-end mb-10">
-
-                    <div>
-                        <p className="text-rose-600 uppercase tracking-widest text-sm">
-                            Customer favourites
-                        </p>
-
-                        <h2 className="section-heading mt-2">
-                            Latest Gifts
-                        </h2>
-                    </div>
-
-                    <Link to="/gifts" className="text-rose-700 font-semibold">
-                        View All Gifts <FaArrowRight className="inline ml-1" />
-                    </Link>
-
-                </div>
-
-                {loading ? (
-
-                    <p className="text-center py-12 text-rose-700 font-semibold">
-                        Loading gifts...
-                    </p>
-
-                ) : error ? (
-
-                    <p className="text-center py-12 text-red-600">
-                        {String(error)}
-                    </p>
-
-                ) : popularGifts.length > 0 ? (
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
-                        {popularGifts.map(gift => (
-                            <GiftCard
-                                key={gift._id}
-                                gift={gift}
-                            />
-                        ))}
-                    </div>
-
-                ) : (
-
-                    <p className="text-center py-12 text-gray-500">
-                        No gifts are available right now.
-                    </p>
-
-                )}
-
-            </section>
-
-            {/* Personalization banner */}
-            <section className="px-6 md:px-16 py-16">
-
-                <div className="grid md:grid-cols-2 rounded-3xl overflow-hidden bg-[#f5e2e5]">
-
-                    <div className="p-9 md:p-16 flex flex-col justify-center">
-
-                        <p className="text-rose-700 uppercase tracking-widest text-sm">
-                            Your ideas, our creations
-                        </p>
-
-                        <h2 className="text-4xl md:text-5xl font-bold mt-4 leading-tight">
-                            Make It Personal. Make It Unforgettable.
-                        </h2>
-
-                        <p className="text-gray-600 mt-5 leading-7">
-                            Add a name, photo or heartfelt message and turn an ordinary
-                            present into a memory that lasts forever.
-                        </p>
-
-                        <Link to="/gifts" className="gift-btn mt-7 w-fit">
-                            Create Your Gift <FaArrowRight className="inline ml-2" />
-                        </Link>
-
-                    </div>
-
-                    <div className="min-h-[300px]">
-                        <img
-                            src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=900"
-                            alt="Personalized gift"
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-
-                </div>
-            </section>
-
-            {/* Reviews section */}
-            <section className="px-6 md:px-16 py-16 text-center bg-white">
-
-                <p className="text-rose-600 uppercase tracking-widest text-sm">
-                    Happy customers
-                </p>
-
-                <h2 className="section-heading mt-2">
-                    Love Shared Through Gifts
-                </h2>
-
-                <div className="grid md:grid-cols-3 gap-6 mt-10">
-
-                    {[
-                        ['Absolutely beautiful!', 'The personalized photo frame was perfect. Great quality and lovely packaging.', 'Ananya'],
-                        ['A wonderful surprise', 'I ordered a gift hamper for my friend. She loved every detail!', 'Meera'],
-                        ['Excellent experience', 'Easy customization and the gift arrived safely. Highly recommended.', 'Arjun']
-                    ].map((review, index) => (
-                        <div key={index} className="p-7 bg-[#fff7f6] rounded-2xl">
-
-                            <div className="flex justify-center text-yellow-500 gap-1 mb-4">
-                                {[1, 2, 3, 4, 5].map(n => (
-                                    <FaStar key={n} />
-                                ))}
-                            </div>
-
-                            <h3 className="text-xl font-semibold">
-                                {review[0]}
-                            </h3>
-
-                            <p className="text-gray-500 mt-3">
-                                {review[1]}
-                            </p>
-
-                            <p className="font-semibold text-rose-700 mt-5">
-                                {review[2]}
-                            </p>
 
                         </div>
                     ))}
 
                 </div>
+            </section>
+
+            {/* CATEGORIES */}
+            <section className="bg-[#fffaf9] px-6 md:px-16 py-20">
+
+                <div className="max-w-7xl mx-auto">
+
+                    <div className="text-center mb-12">
+
+                        <p className={sectionSubtitle}>
+                            Find the perfect gift
+                        </p>
+
+                        <h2 className={`${sectionTitle} mt-3`}>
+                            Shop By Category
+                        </h2>
+
+                        <p className="text-gray-500 mt-4 max-w-xl mx-auto leading-7">
+                            From birthdays to anniversaries, find something
+                            special for every occasion and every loved one.
+                        </p>
+
+                        <div className="w-16 h-1 bg-[#c66a86] rounded-full mx-auto mt-5"></div>
+
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                        {categories.map((category, index) => (
+                            <Link
+                                to={`/gifts?category=${encodeURIComponent(category.filter)}`}
+                                key={index}
+                                className="relative h-[310px] md:h-[350px] rounded-3xl overflow-hidden group shadow-md hover:shadow-2xl transition-all duration-500"
+                            >
+
+                                <img
+                                    src={category.image}
+                                    alt={category.name}
+                                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+                                />
+
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#28121e]/90 via-black/10 to-transparent"></div>
+
+                                <div className="absolute bottom-0 left-0 w-full p-6 text-white">
+
+                                    <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl mb-4">
+                                        {category.icon}
+                                    </div>
+
+                                    <h3 className="text-xl md:text-2xl font-bold">
+                                        {category.name}
+                                    </h3>
+
+                                    <p className="text-sm text-white/80 mt-2 flex items-center gap-2 group-hover:text-[#ffc3d2] transition">
+                                        Explore collection
+                                        <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                    </p>
+
+                                </div>
+
+                            </Link>
+                        ))}
+
+                    </div>
+
+                </div>
+            </section>
+
+            {/* LATEST GIFTS */}
+            <section className="bg-[#f9ecee] px-6 md:px-16 py-20">
+
+                <div className="max-w-7xl mx-auto">
+
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-5 mb-12">
+
+                        <div>
+                            <p className={sectionSubtitle}>
+                                Customer favourites
+                            </p>
+
+                            <h2 className={`${sectionTitle} mt-3`}>
+                                Latest Gifts
+                            </h2>
+
+                            <p className="text-gray-500 mt-3">
+                                Discover something special for someone special.
+                            </p>
+                        </div>
+
+                        <Link
+                            to="/gifts"
+                            className="inline-flex items-center justify-center gap-2 bg-[#872d4c] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#682139] hover:-translate-y-1 transition-all shadow-md"
+                        >
+                            View All Gifts <FaArrowRight />
+                        </Link>
+
+                    </div>
+
+                    {loading ? (
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[1, 2, 3, 4].map(item => (
+                                <div key={item} className="bg-white rounded-2xl p-4 shadow-sm animate-pulse">
+                                    <div className="h-56 bg-rose-100 rounded-xl"></div>
+                                    <div className="h-4 bg-rose-100 rounded mt-5 w-3/4"></div>
+                                    <div className="h-4 bg-rose-100 rounded mt-3 w-1/2"></div>
+                                </div>
+                            ))}
+                        </div>
+
+                    ) : error ? (
+
+                        <div className="text-center py-14 bg-white rounded-3xl shadow-sm">
+                            <FaGift className="text-4xl text-rose-300 mx-auto mb-4" />
+                            <p className="text-red-600 font-medium">
+                                {String(error)}
+                            </p>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="mt-5 bg-[#872d4c] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#682139] transition"
+                            >
+                                Try Again
+                            </button>
+                        </div>
+
+                    ) : popularGifts.length > 0 ? (
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+                            {popularGifts.map(gift => (
+                                <GiftCard
+                                    key={gift._id}
+                                    gift={gift}
+                                />
+                            ))}
+                        </div>
+
+                    ) : (
+
+                        <div className="text-center py-16 bg-white rounded-3xl">
+                            <FaGift className="text-5xl text-rose-300 mx-auto mb-4" />
+                            <h3 className="text-xl font-bold text-[#49232f]">
+                                No gifts available yet
+                            </h3>
+                            <p className="text-gray-500 mt-2">
+                                Please check back soon for our latest collections.
+                            </p>
+                            <Link to="/gifts" className={`${primaryButton} mt-6`}>
+                                Browse Gifts <FaArrowRight />
+                            </Link>
+                        </div>
+
+                    )}
+
+                </div>
+            </section>
+
+            {/* PERSONALIZATION BANNER */}
+            <section className="bg-[#fffaf9] px-6 md:px-16 py-20">
+
+                <div className="max-w-7xl mx-auto grid md:grid-cols-2 rounded-[30px] overflow-hidden bg-[#f2dce2] shadow-xl">
+
+                    <div className="p-8 md:p-16 flex flex-col justify-center">
+
+                        <p className={sectionSubtitle}>
+                            Your ideas, our creations
+                        </p>
+
+                        <h2 className="text-4xl md:text-5xl font-bold text-[#49232f] mt-5 leading-tight">
+                            Make It Personal.
+                            <span className="block text-[#a44768]">
+                                Make It Unforgettable.
+                            </span>
+                        </h2>
+
+                        <p className="text-gray-600 mt-6 leading-8">
+                            Add a name, photo or heartfelt message and turn an
+                            ordinary present into a memory that lasts forever.
+                            Your imagination makes every gift unique.
+                        </p>
+
+                        <Link
+                            to="/gifts"
+                            className={`${primaryButton} mt-8 w-fit`}
+                        >
+                            Create Your Gift <FaArrowRight />
+                        </Link>
+
+                    </div>
+
+                    <div className="min-h-[350px] md:min-h-[550px] relative overflow-hidden">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1000"
+                            alt="Personalized gift"
+                            className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition duration-700"
+                        />
+
+                    </div>
+
+                </div>
+            </section>
+
+            {/* REVIEWS */}
+            <section className="bg-white px-6 md:px-16 py-20">
+
+                <div className="max-w-7xl mx-auto">
+
+                    <div className="text-center mb-12">
+
+                        <p className={sectionSubtitle}>
+                            Happy customers
+                        </p>
+
+                        <h2 className={`${sectionTitle} mt-3`}>
+                            Love Shared Through Gifts
+                        </h2>
+
+                        <p className="text-gray-500 mt-4">
+                            Every smile makes our work more meaningful.
+                        </p>
+
+                        <div className="w-16 h-1 bg-[#c66a86] rounded-full mx-auto mt-5"></div>
+
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-7">
+
+                        {reviews.map((review, index) => (
+                            <div
+                                key={index}
+                                className="p-8 bg-[#fff7f6] rounded-3xl border border-rose-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+                            >
+
+                                <div className="flex text-[#e6a32b] gap-1 mb-5">
+                                    {[1, 2, 3, 4, 5].map(n => (
+                                        <FaStar key={n} />
+                                    ))}
+                                </div>
+
+                                <h3 className="text-xl font-bold text-[#49232f]">
+                                    {review[0]}
+                                </h3>
+
+                                <p className="text-gray-600 mt-4 leading-7">
+                                    "{review[1]}"
+                                </p>
+
+                                <div className="flex items-center gap-3 mt-7 pt-5 border-t border-rose-100">
+
+                                    <div className="w-11 h-11 rounded-full bg-[#872d4c] text-white flex items-center justify-center font-bold">
+                                        {review[2].charAt(0)}
+                                    </div>
+
+                                    <div>
+                                        <p className="font-bold text-[#49232f]">
+                                            {review[2]}
+                                        </p>
+                                        <p className="text-xs text-gray-500">
+                                            Happy Customer
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        ))}
+
+                    </div>
+
+                </div>
+            </section>
+
+            {/* FINAL CTA */}
+            <section className="bg-[#49232f] px-6 md:px-16 py-16 text-center">
+
+                <div className="max-w-3xl mx-auto">
+
+                    <FaGift className="text-4xl text-[#ffb8ca] mx-auto mb-5" />
+
+                    <h2 className="text-3xl md:text-4xl font-bold text-white">
+                        Make Someone's Day Special
+                    </h2>
+
+                    <p className="text-rose-100/80 mt-4 leading-7">
+                        Find a gift that says what words sometimes cannot.
+                        Create beautiful memories with GIFTORA.
+                    </p>
+
+                    <Link
+                        to="/gifts"
+                        className="inline-flex items-center gap-2 mt-8 bg-white text-[#872d4c] px-8 py-3.5 rounded-full font-bold hover:bg-[#ffc3d2] hover:-translate-y-1 transition-all duration-300 shadow-lg"
+                    >
+                        Find Your Perfect Gift <FaArrowRight />
+                    </Link>
+
+                </div>
+
             </section>
 
         </>
